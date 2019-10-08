@@ -4,17 +4,18 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_todo_2/src/bloc/task_list_bloc.dart';
 import 'package:flutter_todo_2/src/database/models/item_task.dart';
+import 'package:flutter_todo_2/src/database/models/item_task_new.dart';
 import 'package:intl/intl.dart';
 
 import 'add_task_view.dart';
 
 class TaskList extends StatefulWidget {
-  List<ItemTask> taskList;
+  List<ItemTaskNew> taskList;
   TaskListBloc taskListBloc;
 
   TaskList(
     this.taskListBloc,
-    List<ItemTask> this.taskList, {
+    List<ItemTaskNew> this.taskList, {
     Key key,
   }) : super(key: key);
 
@@ -142,7 +143,7 @@ class _TaskListState extends State<TaskList> {
         : (deathLineDate.difference(nowDate).inMilliseconds % 1000).toString();
   }
 
-  edit(TaskListBloc taskListBloc, ItemTask itemTask, BuildContext context) {
+  edit(TaskListBloc taskListBloc, ItemTaskNew itemTask, BuildContext context) {
     Navigator.push(
         context,
         new MaterialPageRoute(

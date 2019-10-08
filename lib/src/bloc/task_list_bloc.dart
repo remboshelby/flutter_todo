@@ -1,12 +1,13 @@
 import 'dart:async';
 
 import 'package:flutter_todo_2/src/database/models/item_task.dart';
+import 'package:flutter_todo_2/src/database/models/item_task_new.dart';
 import 'package:flutter_todo_2/src/repository/task_repository.dart';
 
 class TaskListBloc {
   final _taskRepository = TaskRepository();
 
-  final _taskController = StreamController<List<ItemTask>>.broadcast();
+  final _taskController = StreamController<List<ItemTaskNew>>.broadcast();
 
   get tasks => _taskController.stream;
 
@@ -18,17 +19,17 @@ class TaskListBloc {
     _taskController.sink.add(await _taskRepository.getAllTask());
   }
 
-  addTask(ItemTask itemTask) async {
+  addTask(ItemTaskNew itemTask) async {
     await _taskRepository.insertTask(itemTask);
     getTasks();
   }
 
-  updateTask(ItemTask itemTask) async {
+  updateTask(ItemTaskNew itemTask) async {
     await _taskRepository.updateTask(itemTask);
     getTasks();
   }
 
-  deleteTask(ItemTask itemTask) async {
+  deleteTask(ItemTaskNew itemTask) async {
     await _taskRepository.deleteTask(itemTask);
     getTasks();
   }

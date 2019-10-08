@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_todo_2/src/database/models/item_task_new.dart';
 import 'package:flutter_todo_2/src/ui/add_task_view.dart';
 import 'package:flutter_todo_2/src/ui/task_list.dart';
 
@@ -33,7 +34,7 @@ class _ListScreenState extends State<ListScreen> {
         ),
         body: StreamBuilder(
           stream: widget.taskListBloc.tasks,
-          builder: (context, AsyncSnapshot<List<ItemTask>> snapshot) {
+          builder: (context, AsyncSnapshot<List<ItemTaskNew>> snapshot) {
             if (snapshot.hasData) {
               return snapshot.data.length != 0
                   ? new TaskList(widget.taskListBloc, snapshot.data)

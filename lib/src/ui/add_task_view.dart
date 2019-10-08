@@ -3,13 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:flutter_todo_2/src/bloc/task_list_bloc.dart';
 import 'package:flutter_todo_2/src/database/models/item_task.dart';
+import 'package:flutter_todo_2/src/database/models/item_task_new.dart';
 import 'package:intl/intl.dart';
 
 class AddTaskView extends StatefulWidget {
   static const routeName = '/addTask';
 
   final bool isEdit;
-  final ItemTask itemTask;
+  final ItemTaskNew itemTask;
   final TaskListBloc taskListBloc;
 
   const AddTaskView({
@@ -22,23 +23,27 @@ class AddTaskView extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
     // TODO: implement createState
-    return new _AddTaskView(this.taskListBloc, this.isEdit, this.itemTask);
+    return new _AddTaskView();
   }
 }
 
 class _AddTaskView extends State<AddTaskView> {
   final teTaskName = TextEditingController();
   String task_date = DateFormat("yyyy-MM-dd").format(DateTime.now());
-  final TaskListBloc taskListBloc;
+  TaskListBloc taskListBloc;
 
   bool isEdit;
-  ItemTask itemTask;
+  ItemTaskNew itemTask;
 
-  _AddTaskView(this.taskListBloc, this.isEdit, this.itemTask) {
-    if (itemTask != null) {
-      this.itemTask = itemTask;
-      task_date = itemTask.taskDeadLine;
-      teTaskName.text = itemTask.taskName;
+
+  @override
+  void initState() {
+    taskListBloc = widget.taskListBloc;
+    isEdit = widget.isEdit;
+    if (widget.itemTask != null) {
+      this.itemTask = widget.itemTask;
+      task_date = widget.itemTask.taskDeadLine;
+      teTaskName.text = widget.itemTask.taskName;
     }
   }
 
@@ -85,9 +90,11 @@ class _AddTaskView extends State<AddTaskView> {
   }
 
   Future addRecord(bool isEdit) async {
-    var itemTask = new ItemTask(teTaskName.text, task_date);
+    var itemTask = ItemTaskNew((b) => b..taskDeadLine = task_date.. taskName = teTaskName.text);
     if (isEdit) {
-      itemTask.setTaskId(this.itemTask.id);
+//      itemTask.setTaskId(this.itemTask.id);
+      var itemTask = ItemTaskNew((b) => b..taskDeadLine = task_date.. taskName = teTaskName.text
+      ..id = this.itemTask.id);
       await taskListBloc.updateTask(itemTask);
     } else {
       await taskListBloc.addTask(itemTask);
@@ -192,7 +199,7 @@ class _AddTaskView extends State<AddTaskView> {
 
 class TaskArguments {
   final bool isEdit;
-  final ItemTask itemTask;
+  final ItemTaskNew itemTask;
 
   TaskArguments(this.isEdit, this.itemTask);
 }
